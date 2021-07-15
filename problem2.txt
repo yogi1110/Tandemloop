@@ -1,0 +1,21 @@
+import java.util.*;
+public class odd {
+public static void main(String[] args) {
+	Scanner sc=new Scanner(System.in);
+	System.out.println("enter the number");
+
+	int n=sc.nextInt();
+	if(n%2==0){
+   n=n-1;
+	}
+	int num=n*2;
+	System.out.print("list is here:");
+	for(int i=1;i<=num;i++)
+	{
+		if(i%2!=0)
+		{
+			System.out.print(i+",");
+		}
+	}
+}
+}
