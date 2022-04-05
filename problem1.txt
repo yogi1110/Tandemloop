@@ -30,7 +30,5 @@ public static void main(String[] args) {
 		System.out.println("Result of division:"+res);
 		break;
 		default : 
-			System.out.println("Invalid choice");
-	}
-}
+			System.out.println("Invalid choice")
 }
