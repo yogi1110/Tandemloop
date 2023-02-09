@@ -1,0 +1,57 @@
+$PACKAGE KIB.CONV
+SUBROUTINE O.DATA.GET.OLDNEW.VALUE
+*-----------------------------------------------------------------------------
+*
+*-----------------------------------------------------------------------------
+* Modification History :
+*-----------------------------------------------------------------------------
+
+*-----------------------------------------------------------------------------
+
+    $USING EB.API
+    $USING EB.SystemTables
+    $USING EB.DataAccess
+    $USING ST.Customer
+    $USING EB.Reports
+  
+
+    GOSUB INIT
+    GOSUB PROCESS
+
+RETURN
+
+INIT:
+    CustomerHisFileName = "F.CUSTOMER$HIS"
+    CustomerHisFilePoint = ''
+    EB.DataAccess.Opf(CustomerHisFileName,CustomerHisFilePoint)
+    SsRec=''
+    EB.API.GetStandardSelectionDets("CUSTOMER", SsRec)
+    
+    
+  
+    
+RETURN
+PROCESS:
+    
+    CustomerID=EB.Reports.getOData()
+    CustomerRec = ''
+    CUS.ERR =''
+    EB.DataAccess.FRead( CustomerHisFileName,CustomerID,CustomerRec,CustomerHisFilePoint,CUS.ERR)
+    CustomerPrevID=FIELD(CustomerID,';',1):';':CustomerRec<ST.Customer.Customer.EbCusCurrNo>-1
+    CustomerPrevIDError=''
+    CustomerPrevRec=''
+    EB.DataAccess.FRead(CustomerHisFileName, CustomerPrevID,CustomerPrevRec,CustomerHisFilePoint , CustomerPrevError)
+   
+    LOOP
+        REMOVE CustomerField FROM CustomerRec  SETTING FieldPos
+    WHILE  CustomerField:FieldPos
+        IF CustomerRec<FieldPos> NE CustomerPrevRec<FieldPos> THEN
+            EB.API.FieldNumbersToNames(FieldPos, SsRec, FieldName, '', '')
+            ARR = FieldName:"*":CustomerPrevRec<FieldPos>:"*":CustomerRec<FieldPos>
+        END
+    
+    REPEAT
+
+RETURN
+
+END
